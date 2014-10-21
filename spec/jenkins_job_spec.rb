@@ -4,9 +4,13 @@ describe 'Jenkins' do
   describe 'Job' do
     it 'can list jobs' do
 
-      username = ENV['JENKINS_HOST']
+      host = ENV['JENKINS_HOST']
 
-      service_instance = service_instance('jenkins_jobs')
+      service_instance = service_instance('jenkins_job')
+
+      params = {
+        'host' => host
+      }
 
       service_instance.test_action('list',params) do
         expect_return

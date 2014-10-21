@@ -12,7 +12,7 @@ Factor::Connector.service 'jenkins_job' do
 
     fail 'Host (host) is requires' unless host
 
-    connection_settings = { host: host }
+    connection_settings = { server_ip: host }
     connection_settings[:username] = username if username
     connection_settings[:password] = password if password
 
