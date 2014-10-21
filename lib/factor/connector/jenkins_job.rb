@@ -23,7 +23,7 @@ Factor::Connector.service 'jenkins_job' do
     jobs = if filter
       client.job.list_details(filter)
     elsif status
-      client.job.list_all_with_details
+      client.job.list_by_status(status)
     else
       client.job.list_all_with_details
     end
