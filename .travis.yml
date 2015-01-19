@@ -5,4 +5,7 @@ before_install:
   - wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
   - nohup java -jar jenkins.war &
 env:
-  - JENKINS_HOST="http://0.0.0.0:8080"
+  matrix:
+    - JENKINS_HOST="http://0.0.0.0:8080"
+  global:
+    secure: IFn6ExlQO9gqoMM4OxIlx7Ylcjon3WpfjQLMkDCCXh1B0odghUEnnogKnA8vG/Aaim/krGjMfEEFRUjfYN8yLnK5Up5Nsy0tzU0t1U+Kcm4rQEPK8tnOE+qlrciaYTyZb2vyRdIz2cmFeKufC2aF8eKLg0ArlQtLm3SjBVRO2/M=
