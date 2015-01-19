@@ -4,7 +4,7 @@ require 'jenkins_api_client'
 
 describe 'Jenkins' do
   describe 'Job' do
-    before do
+    before :each do
       @host = ENV['JENKINS_HOST']
       @client = JenkinsApi::Client.new(server_url: @host)
       name = "test_#{SecureRandom.hex(4)}"
@@ -16,7 +16,7 @@ describe 'Jenkins' do
       @params = { 'host' => @host, 'job' => @build }
     end
 
-    after do
+    after :each do
       @client.job.delete @build
     end
 
