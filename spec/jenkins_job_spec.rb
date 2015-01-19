@@ -2,8 +2,8 @@ require 'spec_helper'
 require 'securerandom'
 require 'jenkins_api_client'
 
-describe 'Jenkins' do
-  describe 'Job' do
+describe 'jenkins' do
+  describe ':: jobs' do
     before :each do
       @host = ENV['JENKINS_HOST']
       @client = JenkinsApi::Client.new(server_url: @host)
@@ -20,20 +20,20 @@ describe 'Jenkins' do
       @client.job.delete @build
     end
 
-    it 'can list jobs' do
+    it ':: list' do
       @service_instance.test_action('list',@params) do
         content = expect_return[:payload]
         expect(content).to be_a(Array)
       end
     end
 
-    it 'can build a job' do
+    it ':: build' do
       @service_instance.test_action('build',@params) do
         expect_return code: '201'
       end
     end
 
-    it 'can get current build status' do
+    it ':: status' do
 
       @service_instance.test_action('status',@params) do
         response = expect_return
