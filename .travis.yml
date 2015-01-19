@@ -4,5 +4,5 @@ rvm:
 before_install:
   - wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
   - nohup java -jar jenkins.war &
-ENV:
-  - JENKINS_HOST=http://0.0.0.0:8080
+env:
+  - JENKINS_HOST="http://0.0.0.0:8080"
