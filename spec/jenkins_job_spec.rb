@@ -22,7 +22,8 @@ describe 'Jenkins' do
 
     it 'can list jobs' do
       @service_instance.test_action('list',@params) do
-        puts expect_return
+        content = expect_return[:payload]
+        expect(content).to be_a(Array)
       end
     end
 
