@@ -5,4 +5,4 @@ before_install:
   - wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
   - nohup java -jar jenkins.war --httpPort=8767 &
 ENV:
-  - JENKINS_HOST=0.0.0.0:8767
+  - JENKINS_HOST=http://0.0.0.0:8767

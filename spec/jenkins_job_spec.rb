@@ -1,12 +1,23 @@
 require 'spec_helper'
+require 'securerandom'
+require 'jenkins_api_client'
 
 describe 'Jenkins' do
   describe 'Job' do
     before do
       @host = ENV['JENKINS_HOST']
-      @build = ENV['JENKINS_TEST_BUILD']
+      @client = JenkinsApi::Client.new(server_url: @host)
+      name = "test_#{SecureRandom.hex(4)}"
+      job_config =  @client.job.build_freestyle_config(name:name)
+      job =  @client.job.create(name, job_config)
+      @build = @client.job.list(name)[0]
+
       @service_instance = service_instance('jenkins_job')
       @params = { 'host' => @host, 'job' => @build }
+    end
+
+    after do
+      @client.job.delete @build
     end
 
     it 'can list jobs' do
@@ -28,38 +39,6 @@ describe 'Jenkins' do
 
         expect(response[:payload]).to include(:status)
       end      
-    end
-
-    it 'can get rename' do
-      params = @params.dup
-      params['new_job'] = 'factor-build-new'
-
-      @service_instance.test_action('rename',params) do
-        response = expect_return
-        expect(response[:payload]).to include(:code)
-        expect(response[:payload][:code]).to be == '302'
-      end
-
-      params['job'] = 'factor-build-new'
-      params['new_job'] = 'factor-build'
-      
-      @service_instance.test_action('rename',params) do
-        response = expect_return
-        expect(response[:payload]).to include(:code)
-        expect(response[:payload][:code]).to be == '302'
-      end
-    end
-
-    it 'can stop a build' do
-      @service_instance.test_action('build',@params) do
-        expect_return code: '201'
-      end
-
-      sleep 10
-
-      @service_instance.test_action('stop',@params) do
-        expect_return code: '302'
-      end
     end
   end
 end
