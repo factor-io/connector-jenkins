@@ -55,17 +55,29 @@ Factor::Connector.service 'jenkins_job' do
       'poll_interval'                 => 5,
       'completion_proc'               => lambda {|build_number,canceled|
         fail 'Build was canceled before it completed' if canceled
-        status = client.job.get_current_build_status(id)
-        console = client.job.get_console_output(id,build_number) 
-        action_callback build_number: build_number, status: status, console: console
       }
     }
 
+    info 'Starting the build job. Waiting in queue.'
     begin
-      code = client.job.build(id, job_params, opts)
+      build_number = client.job.build(id, job_params, opts)
+      info "Build started with ID: #{build_number}"
     rescue => ex
       fail "Exception in Jenkins: #{ex.message}"
     end
+
+    info "Waiting for build to complete"
+    begin
+      status  = client.job.get_current_build_status(id)
+      sleep 2
+    end while status == 'running'
+    info "Build complete with status: #{status}"
+
+    info 'Getting console output'
+    console = client.job.get_console_output(id,build_number) 
+
+    action_callback build_number: build_number, status: status, console: console
+
   end
 
   action 'status' do |params|
