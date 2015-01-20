@@ -34,6 +34,10 @@ describe 'jenkins' do
         expect(content).to be_a(Hash)
         expect(content[:build_number]).to be_a(Integer)
         expect(content[:status]).to eq('success')
+        expect(content[:console]).to be_a(Hash)
+        expect(content[:console].keys).to include('output')
+        expect(content[:console].keys).to include('size')
+        expect(content[:console].keys).to include('more')
       end
     end
 
