@@ -32,10 +32,13 @@ Factor::Connector.service 'jenkins_job' do
   end
 
   action 'build' do |params|
-    username = params['username']
-    password = params['password']
-    host     = params['host']
-    id       = params['job']
+    username                      = params['username']
+    password                      = params['password']
+    host                          = params['host']
+    id                            = params['job']
+    job_params                    = params['params'] || {}
+    build_start_timeout           = params['build_start_timeout'] || 60*6
+    cancel_on_build_start_timeout = params['cancel_on_build_start_timeout'] || true
 
     fail 'Host (host) is required' unless host
     fail 'Job ID (job) is required' unless id
@@ -46,11 +49,22 @@ Factor::Connector.service 'jenkins_job' do
 
     client = JenkinsApi::Client.new connection_settings
 
-    code = client.job.build(id)
+    opts = {
+      'build_start_timeout'           => build_start_timeout,
+      'cancel_on_build_start_timeout' => cancel_on_build_start_timeout,
+      'poll_interval'                 => 5,
+      'completion_proc'               => lambda {|build_number,canceled|
+        fail 'Build was canceled before it completed' if canceled
+        status                          = client.job.get_current_build_status(id)
+        action_callback build_number: build_number, status: status  
+      }
+    }
 
-    fail "Unable to build job: #{id}" unless code == '201'
-
-    action_callback code: code
+    begin
+      code = client.job.build(id, job_params, opts)
+    rescue => ex
+      fail "Exception in Jenkins: #{ex.message}"
+    end
   end
 
   action 'status' do |params|

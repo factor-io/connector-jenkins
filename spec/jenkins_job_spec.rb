@@ -29,7 +29,11 @@ describe 'jenkins' do
 
     it ':: build' do
       @service_instance.test_action('build',@params) do
-        expect_return code: '201'
+        content = expect_return[:payload]
+
+        expect(content).to be_a(Hash)
+        expect(content[:build_number]).to be_a(Integer)
+        expect(content[:status]).to eq('success')
       end
     end
 
