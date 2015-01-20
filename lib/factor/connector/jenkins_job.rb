@@ -37,7 +37,7 @@ Factor::Connector.service 'jenkins_job' do
     host                          = params['host']
     id                            = params['job']
     job_params                    = params['params'] || {}
-    build_start_timeout           = params['build_start_timeout'] || 60*6
+    build_start_timeout           = params['build_start_timeout'] || 60*5
     cancel_on_build_start_timeout = params['cancel_on_build_start_timeout'] || true
 
     fail 'Host (host) is required' unless host
