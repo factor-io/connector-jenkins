@@ -52,7 +52,6 @@ Factor::Connector.service 'jenkins_job' do
     opts = {
       'build_start_timeout'           => build_start_timeout,
       'cancel_on_build_start_timeout' => cancel_on_build_start_timeout,
-      'poll_interval'                 => 5,
       'completion_proc'               => lambda {|build_number,canceled|
         fail 'Build was canceled before it completed' if canceled
       }
