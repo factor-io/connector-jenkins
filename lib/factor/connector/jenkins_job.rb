@@ -55,8 +55,9 @@ Factor::Connector.service 'jenkins_job' do
       'poll_interval'                 => 5,
       'completion_proc'               => lambda {|build_number,canceled|
         fail 'Build was canceled before it completed' if canceled
-        status                          = client.job.get_current_build_status(id)
-        action_callback build_number: build_number, status: status  
+        status = client.job.get_current_build_status(id)
+        console = client.job.get_console_output(id,build_number) 
+        action_callback build_number: build_number, status: status, console: console
       }
     }
 
