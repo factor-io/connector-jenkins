@@ -9,3 +9,10 @@ env:
     - JENKINS_HOST="http://0.0.0.0:8080"
   global:
     secure: IFn6ExlQO9gqoMM4OxIlx7Ylcjon3WpfjQLMkDCCXh1B0odghUEnnogKnA8vG/Aaim/krGjMfEEFRUjfYN8yLnK5Up5Nsy0tzU0t1U+Kcm4rQEPK8tnOE+qlrciaYTyZb2vyRdIz2cmFeKufC2aF8eKLg0ArlQtLm3SjBVRO2/M=
+deploy:
+  provider: rubygems
+  gem: factor-connector-jenkins
+  api_key:
+    secure: T24epDVon+Cx5yVd02i1ToHjr5pWnMjTCyudzlAXLBF9Rtsta6N6O41RNuHk94KXzoyfS4r8snblzENqR4OFYGE7VkDR1S14nE1rJWM7O9H3ExJh+mPrGtZNQ2Iaxl/a6wGNUb8TQYQEV8v+Qdt7FyFvtESZxHbSClJ7ChOZ1v0=
+  on:
+    tags: true
