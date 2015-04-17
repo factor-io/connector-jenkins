@@ -8,7 +8,7 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
     username = params[:username]
     password = params[:password]
     host     = params[:host]
-    fail 'Host (:host) is requires' unless host
+    fail 'Host (:host) is required' unless host
 
     connection_settings = { server_url: host }
     connection_settings[:username] = username if username
