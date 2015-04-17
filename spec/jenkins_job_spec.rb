@@ -34,12 +34,6 @@ describe JenkinsConnectorDefinition do
       
       expect(data).to be_a(Hash)
       expect(data[:build_number]).to be_a(Integer)
-      expect(data[:status]).to eq('success')
-      expect(data[:console]).to be_a(Hash)
-      expect(data[:console].keys).to include('output')
-      expect(data[:console].keys).to include('size')
-      expect(data[:console].keys).to include('more')
-
     end
 
     it 'can :status' do
