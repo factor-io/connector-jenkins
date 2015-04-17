@@ -8,10 +8,9 @@ describe JenkinsConnectorDefinition do
       @host             = ENV['JENKINS_HOST']
       @client           = JenkinsApi::Client.new(server_url: @host)
       name              = "test_#{SecureRandom.hex(4)}"
-      job_config        =  @client.job.build_freestyle_config(name:name)
-      job               =  @client.job.create(name, job_config)
+      job_config        = @client.job.build_freestyle_config(name:name)
+      job               = @client.job.create(name, job_config)
       @build            = @client.job.list(name)[0]
-      @service_instance = service_instance('jenkins_job')
       @params           = { 'host' => @host, 'job' => @build }
       @runtime          = Factor::Connector::Runtime.new(JenkinsConnectorDefinition)
     end
