@@ -67,9 +67,9 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
 
     action :status do |params|
       client = setup_client(params)
-      id     = params['job']
+      id     = params[:job]
 
-      fail 'Job ID (job) is required' unless id
+      fail 'Job ID (:job) is required' unless id
 
       status = client.job.get_current_build_status(id)
 
