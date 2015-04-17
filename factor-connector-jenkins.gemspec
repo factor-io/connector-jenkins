@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email         = ['maciej@factor.io']
   s.homepage      = 'https://factor.io'
   s.summary       = 'Jenkins Factor.io Connector'
-  s.files         = Dir.glob('lib/factor/connector/*.rb')
+  s.files         = ['lib/factor-connector-jenkins.rb']
   
   s.require_paths = ['lib']
 
