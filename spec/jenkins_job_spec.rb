@@ -27,7 +27,7 @@ describe JenkinsConnectorDefinition do
     end
 
     it 'can :build' do
-      @runtime.run([:job,:list],@params)
+      @runtime.run([:job,:build],@params)
 
       expect(@runtime).to respond
       data = @runtime.logs.last[:data]
