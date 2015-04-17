@@ -33,6 +33,8 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
       job_params                    = params[:params] || {}
       build_start_timeout           = params[:build_start_timeout] || 60*5
       cancel_on_build_start_timeout = params[:cancel_on_build_start_timeout] || true
+      wait                          = params[:wait] || false
+      results                       = {}
 
       fail 'Job ID (:job) is required' unless id
 
@@ -52,17 +54,22 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
         fail "Exception in Jenkins: #{ex.message}"
       end
 
-      info "Waiting for build to complete"
-      begin
-        status  = client.job.get_current_build_status(id)
-        sleep 2
-      end while status == 'running'
-      info "Build complete with status: #{status}"
+      if wait
+        info "Waiting for build to complete"
+        begin
+          status  = client.job.get_current_build_status(id)
+          sleep 2
+        end while status == 'running'
+        info "Build complete with status: #{status}"
 
-      info 'Getting console output'
-      console = client.job.get_console_output(id,build_number) 
+        info 'Getting console output'
+        console = client.job.get_console_output(id,build_number) 
+        results = {build_number: build_number, status: status, console: console}
+      else
+        results = {build_number: build_number}
+      end
 
-      respond build_number: build_number, status: status, console: console
+      respond results
     end
 
     action :status do |params|
