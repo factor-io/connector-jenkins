@@ -21,17 +21,9 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
   resource :job do
     action :list do |params|
       client = setup_client(params)
-      filter = params[:filter]
-      status = params[:status]
-
-      jobs = if filter
-        client.job.list_details(filter)
-      elsif status
-        client.job.list_by_status(status)
-      else
-        client.job.list_all_with_details
-      end
-
+      
+      jobs = client.job.list_all_with_details
+      
       respond jobs
     end
 
