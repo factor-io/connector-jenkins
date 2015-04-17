@@ -11,7 +11,7 @@ describe JenkinsConnectorDefinition do
       job_config        = @client.job.build_freestyle_config(name:name)
       job               = @client.job.create(name, job_config)
       @build            = @client.job.list(name)[0]
-      @params           = { 'host' => @host, 'job' => @build }
+      @params           = { host:@host, job:@build }
       @runtime          = Factor::Connector::Runtime.new(JenkinsConnectorDefinition)
     end
 
