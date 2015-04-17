@@ -23,12 +23,12 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
       client = setup_client(params)
       
       jobs = client.job.list_all_with_details
-      
+
       respond jobs
     end
 
     action :build do |params|
-      client                        = setup_connection(params)
+      client                        = setup_client(params)
       id                            = params[:job]
       job_params                    = params[:params] || {}
       build_start_timeout           = params[:build_start_timeout] || 60*5
@@ -66,7 +66,7 @@ class JenkinsConnectorDefinition < Factor::Connector::Definition
     end
 
     action :status do |params|
-      client = setup_connection(params)
+      client = setup_client(params)
       id     = params['job']
 
       fail 'Job ID (job) is required' unless id
