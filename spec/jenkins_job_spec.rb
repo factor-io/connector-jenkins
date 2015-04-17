@@ -13,10 +13,13 @@ describe JenkinsConnectorDefinition do
       @build            = @client.job.list(name)[0]
       @params           = { host:@host, job:@build }
       @runtime          = Factor::Connector::Runtime.new(JenkinsConnectorDefinition)
+
+      Factor::Connector::Test.timeout = 60
     end
 
     after :each do
       @client.job.delete @build
+      Factor::Connector::Test.reset
     end
 
     it 'can :list' do
@@ -26,7 +29,7 @@ describe JenkinsConnectorDefinition do
       expect(data).to be_a(Array)
     end
 
-    it 'can :build' do
+    it 'can :build async' do
       @runtime.run([:job,:build],@params)
 
       expect(@runtime).to respond
@@ -34,6 +37,20 @@ describe JenkinsConnectorDefinition do
       
       expect(data).to be_a(Hash)
       expect(data[:build_number]).to be_a(Integer)
+    end
+
+    it 'can :build sync' do
+      params = @params.dup
+      params[:wait] = true
+      @runtime.run([:job,:build],params)
+
+      expect(@runtime).to respond
+      data = @runtime.logs.last[:data]
+      
+      expect(data).to be_a(Hash)
+      expect(data[:build_number]).to be_a(Integer)
+      expect(data).to include(:status)
+      expect(data).to include(:console)
     end
 
     it 'can :status' do
